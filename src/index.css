@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@theme {
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  
+  --color-accent-green: #39ff14;
+  --color-accent-red: #ef4444;
+  --color-accent-blue: #00b4d8;
+  --color-bg-deep: #0a0a0b;
+  --color-bg-surface: #141415;
+  --color-border-dim: #27272a;
+  
+  --animate-marquee: marquee 240s linear infinite;
+  
+  @keyframes marquee {
+    0% { transform: translateX(100vw); }
+    100% { transform: translateX(-100%); }
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-bg-deep text-[#d4d4d8] antialiased overflow-hidden select-none font-mono;
+  }
+}
+
+@layer components {
+  .status-dot {
+    @apply w-3 h-3 rounded-full;
+  }
+  
+  .status-dot-green {
+    @apply bg-accent-green shadow-[0_0_8px_rgba(57,255,20,0.5)];
+  }
+
+  .terminal-card {
+    @apply bg-bg-surface border border-border-dim rounded-lg p-4 shadow-xl;
+  }
+
+  .osint-heading {
+    @apply text-accent-green text-[10px] uppercase font-bold tracking-widest flex items-center gap-2;
+  }
+
+  .osint-line {
+    @apply block w-4 h-[1px] bg-accent-green;
+  }
+}
+
+/* Custom Markdown styling for the theme */
+.prose-osint h1, .prose-osint h2, .prose-osint h3 {
+  @apply text-accent-green font-bold uppercase tracking-wider mt-4 mb-2 text-sm;
+}
+
+.prose-osint p {
+  @apply leading-relaxed text-[#d4d4d8] text-sm mb-4;
+}
+
+.prose-osint ul {
+  @apply list-none pl-0 mb-4 space-y-2;
+}
+
+.prose-osint li {
+  @apply flex items-start gap-2 text-sm text-[#d4d4d8];
+}
+
+.prose-osint li::before {
+  content: '▸';
+  @apply text-accent-green;
+}
+
+.prose-osint strong {
+  @apply text-[#f4f4f5] font-semibold;
+}

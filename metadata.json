@@ -1,0 +1,6 @@
+{
+  "name": "OSINT Trend Intelligence",
+  "description": "Advanced Cyber Threat Intelligence tool to analyze internet trends, trace origins, and analyze entity impact using Google Search Grounding.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["AI Intelligence", "Real-time Web Search"]
+}

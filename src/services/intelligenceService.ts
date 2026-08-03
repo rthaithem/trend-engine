@@ -27,8 +27,8 @@ export interface IntelligenceReport {
   };
 }
 
-const MODEL_NAME_DISCOVERY = "gemini-3-flash-preview";
-const MODEL_NAME_ANALYSIS = "gemini-3.1-pro-preview";
+const MODEL_NAME_DISCOVERY = "gemini-2.5-flash";
+const MODEL_NAME_ANALYSIS = "gemini-2.5-flash";
 
 export interface TrendingTopic {
   topic: string;
@@ -38,6 +38,42 @@ export interface TrendingTopic {
   isFabricated: boolean; // True if it seems driven by bots/astroturfing
   country: string;
   corruptionRisk: number; // 1-100 score of potential corruption or fraud
+}
+
+function extractAndParseJson<T>(rawText: string): T {
+  if (!rawText) throw new Error("Empty text provided for JSON parsing.");
+  
+  // Clean markdown code block formatting
+  let clean = rawText.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+
+  try {
+    return JSON.parse(clean) as T;
+  } catch (err) {
+    // Find first '{' or '[' and last matching '}' or ']'
+    const startObj = clean.indexOf('{');
+    const startArr = clean.indexOf('[');
+    
+    let startIdx = -1;
+    let endIdx = -1;
+
+    if (startObj !== -1 && (startArr === -1 || startObj < startArr)) {
+      startIdx = startObj;
+      endIdx = clean.lastIndexOf('}');
+    } else if (startArr !== -1) {
+      startIdx = startArr;
+      endIdx = clean.lastIndexOf(']');
+    }
+
+    if (startIdx !== -1 && endIdx > startIdx) {
+      const candidate = clean.substring(startIdx, endIdx + 1);
+      try {
+        return JSON.parse(candidate) as T;
+      } catch (innerErr) {
+        console.error("Failed parsing JSON candidate:", candidate);
+      }
+    }
+    throw err;
+  }
 }
 
 export async function getTrendingTopics(
@@ -105,8 +141,8 @@ export async function getTrendingTopics(
       
       const json = await resp.json();
       const text = json.choices[0]?.message?.content || "";
-      const cleanText = text.replace(/\`\`\`json\n?|\n?\`\`\`/g, '').trim();
-      return JSON.parse(cleanText).trends;
+      const data = extractAndParseJson<{ trends: TrendingTopic[] }>(text);
+      return data.trends || [];
     } catch (e) {
       console.error("OpenRouter Discovery Error:", e);
       return [];
@@ -134,9 +170,8 @@ export async function getTrendingTopics(
     const text = response.text;
     if (!text) return [];
     
-    const cleanText = text.replace(/\`\`\`json\n?|\n?\`\`\`/g, '').trim();
-    const data = JSON.parse(cleanText);
-    return data.trends;
+    const data = extractAndParseJson<{ trends: TrendingTopic[] }>(text);
+    return data.trends || [];
   } catch (error) {
     console.error("Gemini Discovery Error:", error);
     return [];
@@ -258,8 +293,7 @@ export async function analyzeTrend(
 
       const json = await resp.json();
       const text = json.choices[0]?.message?.content || "";
-      const cleanText = text.replace(/\`\`\`json\n?|\n?\`\`\`/g, '').trim();
-      const parsed = JSON.parse(cleanText) as IntelligenceReport;
+      const parsed = extractAndParseJson<IntelligenceReport>(text);
       return { ...parsed, topic };
     } catch (e: any) {
       console.error("OpenRouter Analysis Error:", e);
@@ -289,7 +323,7 @@ export async function analyzeTrend(
       throw new Error("No analysis available.");
     }
 
-    const parsed = JSON.parse(text) as IntelligenceReport;
+    const parsed = extractAndParseJson<IntelligenceReport>(text);
     return {
       ...parsed,
       topic

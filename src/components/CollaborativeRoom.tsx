@@ -69,8 +69,10 @@ export default function CollaborativeRoom({
         }
       });
 
+    // When converting to mobile/desktop app, we map the backend URL via an env variable, otherwise we fallback to generic origin
+    const backendUrl = (import.meta as any).env?.VITE_BACKEND_URL || '';
     // Initialize socket
-    const newSocket = io();
+    const newSocket = io(backendUrl);
     setSocket(newSocket);
 
     newSocket.on('connect', () => {
@@ -157,7 +159,8 @@ export default function CollaborativeRoom({
     setEvDesc("");
   };
 
-  const inviteLink = `${window.location.origin}?room=${roomId}`;
+  const backendUrl = (import.meta as any).env?.VITE_BACKEND_URL || window.location.origin;
+  const inviteLink = `${backendUrl}?room=${roomId}`;
 
   if (!room) return (
     <div className="flex items-center justify-center p-8">

@@ -74,7 +74,7 @@ export default function TrendingFeed({ topics, onSelect, isLoading, isAr = true 
           ))}
         </div>
       )}
-      <div className="space-y-2 p-3 overflow-y-auto custom-scrollbar flex-1">
+      <div className="space-y-0 p-3 overflow-y-auto custom-scrollbar flex-1 flex flex-col md:flex-row md:overflow-x-auto md:space-y-0 md:space-x-3 md:gap-3 rtl:space-x-reverse min-h-[160px]">
         <AnimatePresence mode="popLayout">
           {filteredTopics.map((item, index) => (
             <motion.button
@@ -85,7 +85,7 @@ export default function TrendingFeed({ topics, onSelect, isLoading, isAr = true 
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ delay: index * 0.05, duration: 0.2 }}
               onClick={() => onSelect(item.topic)}
-              className="w-full text-start p-3 transition-all hover:bg-[#18181b] group rounded border border-[#27272a] hover:border-[#52525b] flex flex-col gap-1.5 relative overflow-hidden"
+              className="w-full md:w-[280px] shrink-0 text-start p-3 transition-all hover:bg-[#18181b] group rounded border border-[#27272a] hover:border-[#52525b] flex flex-col gap-1.5 relative overflow-hidden mb-2 md:mb-0"
             >
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center gap-1.5" dir="ltr">

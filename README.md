@@ -1,73 +1,124 @@
-# Trend Engine
+# Trend Engine — OSINT & Digital Intelligence Analysis Dashboard
 
-An advanced, open-source intelligence dashboard designed for field operatives, OSINT investigators, and anti-corruption agencies. Trend Engine monitors global trends, identifies fabrication (bot attacks/astroturfing), evaluates corruption risk, and provides actionable insights.
+> **Trend Engine** is an open-source intelligence (OSINT) forensic platform designed to monitor digital trends, detect artificial manipulation (bot networks, astroturfing campaigns), map key actors, and empower collaborative investigations in real time.
 
-![Trend Engine Dashboard Concept]
+---
 
-## Key Features
--   **Trend Categorization:** Filter live streams of data by sectors such as Technology, Geopolitics, Environment, and Security.
--   **Fabrication Detection:** Utilizes sophisticated prompts via Gemini to detect organic vs. artificially driven trends.
--   **Corruption Risk Analysis:** Generates a real-time Risk Index (1-100) on active global concerns indicating the likelihood of embedded malfeasance.
--   **Actionable Intelligence:** Issues structured reports for authorities with specific interventions and evidence tracking.
--   **Collaborative Investigation Rooms:** Host and join real-time multiplayer rooms using WebSockets. Share evidence types (images, crypto hashes, text logs) which are persistently saved via **SQLite**.
--   **Room AI Agent:** Mention `@ai` inside a collaborative room to invoke a specialized OSINT Assistant that remembers the entire chat history and all submitted evidence.
--   **Bento-Grid Dashboard:** Highly responsive, dark-mode terminal aesthetic interface optimized for high-density information arrays.
--   **Bilingual Interface:** Supports full RTL (Arabic) and LTR (English) bridging global operations.
+## 🌟 Overview & Purpose
 
-## Technology Stack
--   **Frontend:** React 19, TypeScript, Tailwind CSS, Framer Motion
--   **Visualization:** React Cytoscapejs (Network Graph Mapping)
--   **Intelligence Layer:** Google Gemini API (via `@google/genai` sdk) + OpenRouter API integration.
+Modern digital trends are often manufactured or manipulated by coordinated botnets, astroturfing campaigns, or political interest groups. **Trend Engine** acts as a forensic investigation suite that dissects viral topics, uncovers who benefits and who suffers, and maps the hidden connections behind viral movements.
 
-## Getting Started / طريقة الاستخدام
+### Key Capabilities
 
-### Prerequisites / المتطلبات
-- Node.js >= 18
-- Valid Gemini API Key (or OpenRouter Key) / مفتاح جيمني أو أوبن راوتر للتفعيل.
+- 🤖 **Fabrication & Bot Detection:** Analyzes viral sentiment and account patterns to compute an **Astroturfing Index (0–100%)** and **Bot Involvement Probability**.
+- 🕸️ **Knowledge Graph Network:** Interactive Cytoscape visualization mapping Core Issues, Key Players, Beneficiaries, and Victims.
+- 📡 **Live RSS Grounding:** Automatically ingests live news headlines to ground AI analysis in real-time verified context.
+- 👥 **Real-Time Collaborative Rooms:** Enables multiple investigators to join a shared room via unique URLs (`?room=<roomId>`), submit evidence, and chat in real time.
+- 🧠 **Embedded Room AI Agent (`@ai`):** Investigators can tag `@ai` in collaborative room chats to prompt an OSINT Assistant that reviews all room evidence and chat history.
+- 🌐 **Responsive & Bilingual (RTL/LTR):** Designed for global operations with full support for Arabic (RTL) and English (LTR).
 
-### Installation / التثبيت
+---
+
+## 🚀 How It Works (Step-by-Step Workflow)
+
+```
+[ Input Query / Hashtag ] ──► [ Live RSS Fetch ] ──► [ Gemini AI Analysis Engine ]
+                                                             │
+   ┌─────────────────────────────────────────────────────────┴────────────────────────────────────────────────────────┐
+   ▼                                                         ▼                                                        ▼
+[ Bot & Manipulation Score ]               [ Knowledge Graph Entities ]                             [ Actionable Summary & Risk ]
+```
+
+1. **Configuration:** Click the Settings gear icon to input your **Gemini API Key** (or OpenRouter Key) and select your preferred language.
+2. **Search & Analysis:** Enter any hashtag, keyword, or trend topic into the command interface and click **ANALYZE**.
+3. **Live News Grounding:** The system fetches live search & news streams via server-side RSS to ensure accurate, up-to-date analysis.
+4. **Forensic Report:** View the computed Risk Index, Bot activity estimate, and an entity breakdown of Key Players, Beneficiaries, and Victims.
+5. **Network Graph:** Explore the interactive Cytoscape graph to see how actors relate to the core issue.
+6. **Collaborative Investigation:** Open the **Collaborative Room** tab to generate a dedicated room link and collaborate with other team members.
+
+---
+
+## 🔗 Link Sharing & Remote Collaboration
+
+Trend Engine features a built-in multi-user collaboration engine powered by **WebSockets (`socket.io`)** and **SQLite (`better-sqlite3`)**.
+
+### How Sharing Links Works:
+
+1. **Room Creation:** Clicking **"Create New Room"** generates a unique cryptographically secure Room ID (e.g., `room-8f3a9d2c`).
+2. **Shareable Link Generation:** The system formats an invite link:
+   ```
+   https://your-domain.com/?room=room-8f3a9d2c
+   ```
+3. **Remote Joining:** When an investigator opens the link, the application automatically detects the `?room=` URL query parameter, prompts for the operative's alias, and connects directly to the server's WebSocket room.
+4. **Environment Flexibility:**
+   - In web deployments, the socket connects to `window.location.origin`.
+   - When compiled for **Desktop (Electron/Tauri)** or **Mobile (Capacitor/React Native)**, set `VITE_BACKEND_URL=https://your-server-domain.com` in your environment, and the client app will route socket connections and API requests to your hosted backend server seamlessly.
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend** | React 19, TypeScript, Vite, Tailwind CSS, Framer Motion, Lucide Icons |
+| **Data Viz** | Cytoscape.js & React Cytoscapejs |
+| **Backend** | Node.js, Express, Socket.io, RSS Parser |
+| **Database** | SQLite (`better-sqlite3`) for persistent collaborative rooms & evidence |
+| **AI Engine** | Google Gemini API (`@google/genai` SDK) |
+
+---
+
+## 💻 Local Setup & Development
+
+### Prerequisites
+- **Node.js**: v18 or higher
+- **Gemini API Key**: Obtainable from [Google AI Studio](https://aistudio.google.com/)
+
+### Installation
+
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-org/trend-engine.git
+   git clone https://github.com/your-username/trend-engine.git
    cd trend-engine
    ```
+
 2. Install dependencies:
    ```bash
    npm install
    ```
-3. Run the development server (which includes the Express server for RSS fetching):
+
+3. Start the application:
    ```bash
    npm run dev
    ```
+   *The dev server boots the Express backend on port `3000` with integrated Vite middleware.*
 
-### How to Use / كيفية الاستخدام
-**English:**
-1. Open the application.
-2. Click the Settings (Gear) icon in the top right to open the Control Panel.
-3. Select your preferred language (English or Arabic).
-4. Enter your Gemini API Key or OpenRouter API key and click "Save & Close".
-5. The Live Feed (RSS) will automatically fetch the latest global news headlines from reliable search engines to ground the analysis.
-6. Enter a query, hashtag, or topic into the Command Interface and click "ANALYZE".
-7. The system will consult the live news feed, process the query, and map the key players, victims, and beneficiaries on the Knowledge Graph.
-
-**العربية:**
-1. افتح التطبيق.
-2. انقر على أيقونة الإعدادات (الترس) في الزاوية العلوية لفتح لوحة التحكم.
-3. اختر لغتك المفضلة (العربية أو الإنجليزية).
-4. أدخل مفتاح واجهة برمجة التطبيقات (API Key) الخاص بـ Gemini أو OpenRouter وانقر على "حفظ وإغلاق".
-5. ستقوم ميزة "أخبار حية (RSS)" بجلب أحدث الأخبار العالمية من محركات البحث تلقائياً لتعزيز دقة التحليل.
-6. أدخل موضوعاً، أو وسماً (Hashtag)، أو استفساراً في نظام الأوامر وانقر على "تحليل".
-7. سيقوم النظام بمراجعة موجز الأخبار الحي، معالجة استفسارك، ورسم خريطة بيانية توضح الفاعلين الرئيسيين، الضحايا، والمستفيدين على الشبكة.
-
-## Architecture
-The application runs as a full-stack container:
--   **Frontend:** React (Vite) client offering a highly interactive dashboard.
--   **Backend:** Express + Node.js server handling RSS fetching, WebSocket connections for multiplayer rooms, and local AI routing tasks.
--   **Database:** `better-sqlite3` is used persistently on the server to store Collaborative Investigator Rooms, Chats, and Evidence.
--   **AI Integration:** Real-time inference utilizes `@google/genai` on the client side, seamlessly connecting user-provided keys for OSINT reporting.
-
-## License
-MIT License.
+4. Access the dashboard at `http://localhost:3000`.
 
 ---
-*Built for absolute transparency.*
+
+## 📱 Converting to Mobile or Desktop App
+
+To wrap Trend Engine into a native mobile or desktop application:
+
+### 📱 Mobile App (via Capacitor)
+```bash
+npm install @capacitor/core @capacitor/cli @capacitor/android @capacitor/ios
+npx cap init "Trend Engine" "com.trendengine.app" --web-dir dist
+npm run build
+npx cap add android
+npx cap add ios
+npx cap open android
+```
+*Note: Set `VITE_BACKEND_URL=https://your-hosted-server.com` during build so the mobile app communicates with your live backend.*
+
+### 🖥️ Desktop App (via Electron)
+Add Electron builder to `package.json` pointing `main` to a main process file, or build with Tauri for a lightweight desktop binary.
+
+---
+
+## 📜 License & Usage
+
+This project is licensed under the **MIT License**.
+
+*Built for digital transparency and field intelligence operations.*

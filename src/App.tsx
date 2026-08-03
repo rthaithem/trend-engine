@@ -31,8 +31,13 @@ interface Investigation extends IntelligenceReport {
 
 const Widget = ({ title, children, span = 1, rowSpan = 1, className, badge, icon: Icon }: any) => {
   return (
-    <div className={cn(
-      "bg-[#111111] border border-[#27272a] rounded overflow-hidden flex flex-col shadow-lg relative",
+    <motion.div 
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ duration: 0.3 }}
+      className={cn(
+      "bg-[#111111] border border-[#27272a] hover:border-[#3f3f46] transition-colors rounded overflow-hidden flex flex-col shadow-lg relative",
       span === 2 ? 'md:col-span-2 lg:col-span-2 xl:col-span-2' : '',
       span === 3 ? 'md:col-span-2 lg:col-span-3 xl:col-span-3' : '',
       span === 4 ? 'col-span-1 md:col-span-2 lg:col-span-4 xl:col-span-4' : '',
@@ -52,7 +57,7 @@ const Widget = ({ title, children, span = 1, rowSpan = 1, className, badge, icon
       <div className="flex-1 overflow-y-auto custom-scrollbar relative p-3">
         {children}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -394,8 +399,9 @@ ${currentInvestigation.graphData.edges.map((e) => `- ${e.data.source} [${e.data.
             title={isAr ? "توجهات عالمية" : "GLOBAL TRENDS"} 
             icon={Globe} 
             badge={true}
-            span={1}
-            rowSpan={2}
+            span={4}
+            rowSpan={1}
+            className="min-h-[180px] shrink-0"
           >
              <TrendingFeed 
               topics={trendingTopics} 
